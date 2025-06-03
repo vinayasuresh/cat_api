@@ -60,11 +60,11 @@ jobs:
               -p 4389:4389 \
               -e ACCEPT_EULA=Y \
               -e PYTHONUNBUFFERED=1 \
-              -e POSTGRES_SERVER=192.168.1.17 \
+              -e POSTGRES_SERVER=4.240.122.136 \
               -e POSTGRES_PORT=5432 \
-              -e POSTGRES_DB=cat-api \
+              -e POSTGRES_DB=cat_api \
               -e POSTGRES_USER=postgres \
-              -e POSTGRES_PASSWORD='QYam3Xgfcx' \
+              -e POSTGRES_PASSWORD='h4qNV&sC]bt(#[z' \
               -e SECRET_KEY='your-secret-key-here' \
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
               ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
