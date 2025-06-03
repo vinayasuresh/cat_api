@@ -35,14 +35,12 @@ jobs:
           docker build -t ghcr.io/${{ env.GHCR_USERNAME_LOWER }}/cat-api:${{ github.sha }} .
           docker push ghcr.io/${{ env.GHCR_USERNAME_LOWER }}/cat-api:${{ github.sha }}
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -p 23 -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
             export GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}
             export GHCR_TOKEN=${{ secrets.GHCR_TOKEN }}
             export GHCR_USERNAME_LOWER=\$(echo '${{ secrets.GHCR_USERNAME }}' | tr '[:upper:]' '[:lower:]')
@@ -55,19 +53,20 @@ jobs:
             docker stop cat_api || true
             docker rm cat_api || true
 
-            docker system prune -af || true
+            
 
             docker run -d \
               --name cat_api \
               -p 4389:4389 \
               -e ACCEPT_EULA=Y \
               -e PYTHONUNBUFFERED=1 \
-              -e POSTGRES_SERVER=4.240.122.136 \
+              -e POSTGRES_SERVER=192.168.1.17 \
               -e POSTGRES_PORT=5432 \
-              -e POSTGRES_DB=cat_api \
+              -e POSTGRES_DB=cat-api \
               -e POSTGRES_USER=postgres \
-              -e POSTGRES_PASSWORD='h4qNV&sC]bt(#[z' \
+              -e POSTGRES_PASSWORD='QYam3Xgfcx' \
               -e SECRET_KEY='your-secret-key-here' \
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
               ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
+              docker exec cat_api alembic upgrade head
           EOF
