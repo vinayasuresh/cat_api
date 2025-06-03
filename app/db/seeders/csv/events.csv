@@ -1,0 +1,16 @@
+"id","name","description","status","created_by","created_at","updated_by","updated_at"
+1,"Small Craft Advisory","Small Craft Advisory",True,1,"2025-05-19 12:10:43.137504+00",NULL,NULL
+2,"High Wind Warning","High Wind Warning",True,1,"2025-05-20 05:03:11.625158+00",NULL,NULL
+3,"Gale Warning","Gale Warning",True,1,"2025-05-20 05:03:34.167926+00",NULL,NULL
+4,"Flood Warning","Flood Warning",True,1,"2025-05-20 05:04:17.8935+00",NULL,NULL
+5,"Flood Advisory","Flood Advisory",True,1,"2025-05-20 05:04:30.594696+00",NULL,NULL
+6,"Flash Flood Warning","Flash Flood Warning",True,1,"2025-05-20 05:04:51.870487+00",NULL,NULL
+7,"Hydrologic Outlook","Hydrologic Outlook",True,1,"2025-05-20 05:05:15.467744+00",NULL,NULL
+8,"Severe Thunderstorm Watch","Severe Thunderstorm Watch",True,1,"2025-05-20 05:06:18.624055+00",NULL,NULL
+9,"Severe Thunderstorm Warning","Severe Thunderstorm Warning",True,1,"2025-05-20 05:06:27.76021+00",NULL,NULL
+10,"Special Weather Statement","Special Weather Statement",True,1,"2025-05-20 05:06:59.076738+00",NULL,NULL
+11,"Tornado Watch","Tornado Watch",True,1,"2025-05-20 05:08:18.089587+00",NULL,NULL
+12,"Freeze Warning","Freeze Warning",True,1,"2025-05-20 05:08:55.693086+00",NULL,NULL
+13,"Frost Advisory","Frost Advisory",True,1,"2025-05-20 05:09:31.147091+00",NULL,NULL
+14,"Winter Storm Warning","Winter Storm Warning",True,1,"2025-05-20 05:10:00.437155+00",NULL,NULL
+15,"Fire Weather Watch","Fire Weather Watch",True,1,"2025-05-20 05:10:43.667165+00",NULL,NULL
