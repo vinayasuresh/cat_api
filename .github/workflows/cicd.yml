@@ -69,5 +69,6 @@ jobs:
               -e SECRET_KEY='your-secret-key-here' \
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
               ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
-              docker exec cat_api alembic upgrade head
-              EOF
+
+            docker exec cat_api alembic upgrade head
+            EOF
