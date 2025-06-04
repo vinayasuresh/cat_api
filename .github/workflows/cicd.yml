@@ -35,24 +35,17 @@ jobs:
           docker build -t ghcr.io/${{ env.GHCR_USERNAME_LOWER }}/cat-api:${{ github.sha }} .
           docker push ghcr.io/${{ env.GHCR_USERNAME_LOWER }}/cat-api:${{ github.sha }}
 
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
       - name: Deploy to Server
         run: |
-          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -p 23 -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            export GHCR_USERNAME="${GHCR_USERNAME}"
-            export GHCR_TOKEN="${GHCR_TOKEN}"
-            export GHCR_USERNAME_LOWER=$(echo "${GHCR_USERNAME}" | tr '[:upper:]' '[:lower:]')
-            export GITHUB_SHA="${GITHUB_SHA}"
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -p 23 -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
+            export GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}
+            export GHCR_TOKEN=${{ secrets.GHCR_TOKEN }}
+            export GHCR_USERNAME_LOWER=\$(echo '${{ secrets.GHCR_USERNAME }}' | tr '[:upper:]' '[:lower:]')
+            export GITHUB_SHA=${{ github.sha }}
 
-            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+            echo "\$GHCR_TOKEN" | docker login ghcr.io -u "\$GHCR_USERNAME" --password-stdin
 
-            docker pull ghcr.io/$GHCR_USERNAME_LOWER/cat-api:$GITHUB_SHA
+            docker pull ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
 
             docker stop cat_api || true
             docker rm cat_api || true
@@ -64,16 +57,12 @@ jobs:
               -e PYTHONUNBUFFERED=1 \
               -e POSTGRES_SERVER=192.168.1.17 \
               -e POSTGRES_PORT=5432 \
-              -e POSTGRES_DB=cat_api \
+              -e POSTGRES_DB=cat-api \
               -e POSTGRES_USER=postgres \
               -e POSTGRES_PASSWORD='QYam3Xgfcx' \
               -e SECRET_KEY='your-secret-key-here' \
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
-              ghcr.io/$GHCR_USERNAME_LOWER/cat-api:$GITHUB_SHA
+              ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
 
             docker exec cat_api alembic upgrade head
           EOF
-        env:
-          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
-          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
-          GITHUB_SHA: ${{ github.sha }}
