@@ -57,7 +57,7 @@ jobs:
               -e PYTHONUNBUFFERED=1 \
               -e POSTGRES_SERVER=122.165.43.118 \
               -e POSTGRES_PORT=5432 \
-              -e POSTGRES_DB=cat-api \
+              -e POSTGRES_DB=cat_api \
               -e POSTGRES_USER=postgres \
               -e POSTGRES_PASSWORD='QYam3Xgfcx' \
               -e SECRET_KEY='your-secret-key-here' \
