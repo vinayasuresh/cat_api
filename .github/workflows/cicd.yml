@@ -52,17 +52,25 @@ jobs:
 
             docker run -d \
               --name cat_api \
+              --network cat_network \
               -p 4389:4389 \
               -e ACCEPT_EULA=Y \
               -e PYTHONUNBUFFERED=1 \
-              -e POSTGRES_SERVER=122.165.43.118 \
+              -e POSTGRES_SERVER=postgres_postgres_1 \
               -e POSTGRES_PORT=5432 \
               -e POSTGRES_DB=cat-api \
               -e POSTGRES_USER=postgres \
               -e POSTGRES_PASSWORD='QYam3Xgfcx' \
               -e SECRET_KEY='your-secret-key-here' \
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
-              ghcr.io/\$GHCR_USERNAME_LOWER/cat_api:\$GITHUB_SHA
+              ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
 
+            echo "🔍 Pinging DB host from inside the container..."
+            docker exec cat_api ping -c 3 postgres_postgres_1
+
+            echo "🔍 Checking resolved IP inside the container..."
+            docker exec cat_api getent hosts postgres_postgres_1
+
+            echo "🚀 Running Alembic migrations..."
             docker exec cat_api alembic upgrade head
           EOF
