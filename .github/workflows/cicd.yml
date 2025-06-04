@@ -55,7 +55,7 @@ jobs:
               -p 4389:4389 \
               -e ACCEPT_EULA=Y \
               -e PYTHONUNBUFFERED=1 \
-              -e POSTGRES_SERVER=122.165.43.118 \
+              -e POSTGRES_SERVER=192.168.1.17\
               -e POSTGRES_PORT=5432 \
               -e POSTGRES_DB=cat_api \
               -e POSTGRES_USER=postgres \
