@@ -65,12 +65,12 @@ jobs:
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
               ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
 
-            echo "🔍 Pinging DB host from inside the container..."
+            echo " Pinging DB host from inside the container..."
             docker exec cat_api ping -c 3 postgres_postgres_1
 
-            echo "🔍 Checking resolved IP inside the container..."
+            echo " Checking resolved IP inside the container..."
             docker exec cat_api getent hosts postgres_postgres_1
 
-            echo "🚀 Running Alembic migrations..."
+            echo " Running Alembic migrations..."
             docker exec cat_api alembic upgrade head
           EOF
