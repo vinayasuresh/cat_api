@@ -1,6 +1,12 @@
+
 import asyncio
 import sys
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,8 +19,13 @@ async def main():
     db = SessionLocal()
     try:
         await run_all_seeders(db)
+        logger.info("Seeding completed successfully.")
     finally:
         db.close()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        logger.error(f"Seeding failed: {e}")
+        sys.exit(1)
