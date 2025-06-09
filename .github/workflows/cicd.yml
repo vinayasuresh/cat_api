@@ -1,4 +1,3 @@
-
 name: Trigger auto deployment for cat-api
 
 on:
@@ -45,10 +44,10 @@ jobs:
             export GITHUB_SHA=${{ github.sha }}
             echo "\$GHCR_TOKEN" | docker login ghcr.io -u "\$GHCR_USERNAME" --password-stdin
             docker pull ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
-            docker stop cat_api || true
-            docker rm cat_api || true
+            docker stop cat_api_app || true
+            docker rm cat_api_app || true
             docker run -d \
-              --name cat_api \
+              --name cat_api_app \
               --network cat_network \
               -p 4389:4389 \
               -e ACCEPT_EULA=Y \
@@ -62,9 +61,9 @@ jobs:
               -e ACCESS_TOKEN_EXPIRE_MINUTES=30 \
               ghcr.io/\$GHCR_USERNAME_LOWER/cat-api:\$GITHUB_SHA
             echo "🔍 Checking resolved IP inside the container..."
-            docker exec cat_api getent hosts postgres_postgres_1
+            docker exec cat_api_app getent hosts postgres_postgres_1
             echo "🚀 Running Alembic migrations..."
-            docker exec cat_api alembic upgrade head
+            docker exec cat_api_app alembic upgrade head
             echo "🌱 Seeding the database..."
-            docker exec cat_api python scripts/seed_database.py
+            docker exec cat_api_app python scripts/seed_database.py
           EOF
